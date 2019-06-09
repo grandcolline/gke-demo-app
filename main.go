@@ -26,7 +26,7 @@ func main() {
 
 func healthHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("--- versionHandler")
-	fmt.Fprint(w, "verion: v1")
+	fmt.Fprint(w, "verion: v2")
 }
 
 func fiboHandler(w http.ResponseWriter, r *http.Request) {
