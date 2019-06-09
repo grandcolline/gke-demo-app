@@ -6,6 +6,8 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+
+	"github.com/go-chi/chi"
 )
 
 func main() {
@@ -13,17 +15,18 @@ func main() {
 	if flag.Arg(0) == "hc" {
 		fmt.Println("ok")
 	} else {
-		fmt.Println("=== Application API Starting!!")
-		http.HandleFunc("/", healthHandler)
-		http.HandleFunc("/fibo", fiboHandler)
-		http.HandleFunc("/down", downHandler)
-		http.ListenAndServe(":8080", nil)
+		fmt.Println("--- Server Start")
+		r := chi.NewRouter()
+		r.Get("/{version}/", healthHandler)
+		r.Get("/{version}/fibo", fiboHandler)
+		r.Get("/{version}/down", downHandler)
+		http.ListenAndServe(":8080", r)
 	}
 }
 
 func healthHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("--- versionHandler")
-	fmt.Fprint(w, "verion: latest")
+	fmt.Fprint(w, "verion: v1")
 }
 
 func fiboHandler(w http.ResponseWriter, r *http.Request) {
