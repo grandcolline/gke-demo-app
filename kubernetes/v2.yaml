@@ -2,13 +2,13 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: gke-demo-app
-  name: gke-demo-app
+    app: gke-demo-app-v2
+  name: gke-demo-app-v2
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: gke-demo-app
+      app: gke-demo-app-v2
   strategy:
     rollingUpdate:
       maxSurge: 100%
@@ -17,34 +17,24 @@ spec:
   template:
     metadata:
       labels:
-        app: gke-demo-app
+        app: gke-demo-app-v2
     spec:
       containers:
-        - image: grandcolline/gke-demo-app
+          - image: grandcolline/gke-demo-app:v2
           name: gke-demo-app
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: gke-demo-app
+  name: gke-demo-app-v2
 spec:
   ports:
     - port: 8080
       targetPort: 8080
   selector:
-    app: gke-demo-app
+    app: gke-demo-app-v2
   type: NodePort
-
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: gke-demo-app
-spec:
-  backend:
-    serviceName: gke-demo-app
-    servicePort: 8080
-

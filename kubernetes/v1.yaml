@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: gke-demo-app-v1
+  name: gke-demo-app-v1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: gke-demo-app-v1
+  strategy:
+    rollingUpdate:
+      maxSurge: 100%
+      maxUnavailable: 0%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: gke-demo-app-v1
+    spec:
+      containers:
+          - image: grandcolline/gke-demo-app:v1
+          name: gke-demo-app
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gke-demo-app-v1
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: gke-demo-app-v1
+  type: NodePort
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: gke-demo-app-v2
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: gke-demo-app-v2
+  type: NodePort

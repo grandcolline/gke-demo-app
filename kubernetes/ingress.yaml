@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gke-demo-app
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: gke-demo-app-v1
+          servicePort: 8080
+      - path: /v2/*
+        backend:
+          serviceName: gke-demo-app-v2
+          servicePort: 8080
